@@ -1,3 +1,30 @@
+document.body.innerHTML = `
+    <div class="uk-card uk-card-default uk-card-large uk-width-1-2@m uk-position-absolute uk-position-center">
+        <div class="uk-card-header">
+            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                <div class="uk-width-expand">
+                    <h3 class="uk-card-title uk-margin-remove-bottom uk-text-center">Transfer Order Label Generator</h3>
+                </div>
+            </div>
+        </div>
+        <div class="uk-card-body uk-text-center uk-padding-large">
+            <div class="uk-margin">
+                <span id="input_file_label">Wybierz dokumenty.</span>
+            </div>
+        </div>
+        <div class="uk-card-footer uk-text-center">
+            <div class="uk-margin">
+                <div uk-form-custom class="uk-width-expand">
+                    <input id="input_file" accept=".xls,.xlsx" multiple="true" type="file" aria-label="Custom controls">
+                    <button id="input_file_button" class="uk-button uk-button-secondary uk-width-expand" type="button" tabindex="-1">WYBIERZ</button>
+                </div>
+                <button class="uk-button uk-button-primary uk-width-expand" id="button_print" onclick="print();" hidden>PODGLĄD</button>
+            </div>
+        </div>
+    </div>
+    <div id="labels" hidden></div>
+`;
+
 const labelsContainer = document.getElementById('labels');
 let labels = [];
 const qrCodeSize = 128;
