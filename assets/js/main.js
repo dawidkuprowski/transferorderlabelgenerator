@@ -231,9 +231,7 @@ async function generateQRCodes (last) {
             text: label.tr_order + label.tr_item
         });
     }
-    
-    if (last)
-        readyToPrint();
+    readyToPrint();
 }
 
 let printWindow;
