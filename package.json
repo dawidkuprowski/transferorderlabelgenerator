@@ -1,22 +1,5 @@
 {
   "devDependencies": {
     "uglify-js": "^3.17.4"
-  },
-  "name": "transferorderlabelgenerator",
-  "description": "",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dawidkuprowski/transferorderlabelgenerator.git"
-  },
-  "author": "Dawid Kuprowski",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dawidkuprowski/transferorderlabelgenerator/issues"
-  },
-  "homepage": "https://github.com/dawidkuprowski/transferorderlabelgenerator#readme"
+  }
 }

@@ -5,15 +5,39 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Transfer Order Label Generator</title>
-        <script src="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/js/xlsx.full.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/js/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/js/qrcode.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/js/uikit.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/js/uikit-icons.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/css/uikit.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/css/main.css">
+        <script src="./assets/js/xlsx.full.min.js"></script>
+        <script src="./assets/js/jquery.min.js"></script>
+        <script src="./assets/js/qrcode.min.js"></script>
+        <link rel="stylesheet" href="./assets/css/uikit.min.css" />
+        <script src="./assets/js/uikit.min.js"></script>
+        <script src="./assets/js/uikit-icons.min.js"></script>
+        <link rel="stylesheet" href="./assets/css/main.min.css">
     </head>
     <body>
-        <script src="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/js/main.js"></script>
+        <div class="uk-card uk-card-default uk-card-large uk-width-1-2@m uk-position-absolute uk-position-center">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+                        <h3 class="uk-card-title uk-margin-remove-bottom uk-text-center">Transfer Order Label Generator</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card-body uk-text-center uk-padding-large">
+                <div class="uk-margin">
+                    <span id="input_file_label">Wybierz dokumenty.</span>
+                </div>
+            </div>
+            <div class="uk-card-footer uk-text-center">
+                <div class="uk-margin">
+                    <div uk-form-custom class="uk-width-expand">
+                        <input id="input_file" accept=".xls,.xlsx" multiple="true" type="file" aria-label="Custom controls">
+                        <button id="input_file_button" class="uk-button uk-button-secondary uk-width-expand" type="button" tabindex="-1">WYBIERZ</button>
+                    </div>
+                    <button class="uk-button uk-button-primary uk-width-expand" id="button_print" onclick="print();" hidden>PODGLĄD</button>
+                </div>
+            </div>
+        </div>
+        <div id="labels" hidden></div>
+        <script src="./assets/js/main.min.js"></script>
     </body>
 </html>
