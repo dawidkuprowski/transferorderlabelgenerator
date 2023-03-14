@@ -194,11 +194,11 @@ document.getElementById('input_file').addEventListener("change", (_event) => {
                     new Label(id, _date, _time, _anc, _qty, _from_st, _from_bin, _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit);
                 }
             });
+            generateQRCodes(i === files.length - 1);
             document.getElementById('input_file_button').hidden = true;
             document.getElementById('input_file_button').parentElement.hidden = true;
         }
     }
-    generateQRCodes();
 });
 
 function clearLabels () {
@@ -231,7 +231,9 @@ async function generateQRCodes (last) {
             text: label.tr_order + label.tr_item
         });
     }
-    readyToPrint();
+    
+    if (last)
+        readyToPrint();
 }
 
 let printWindow;
