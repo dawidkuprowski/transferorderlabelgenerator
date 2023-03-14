@@ -194,6 +194,7 @@ document.getElementById('input_file').addEventListener("change", (_event) => {
                     new Label(id, _date, _time, _anc, _qty, _from_st, _from_bin, _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit);
                 }
             });
+
             generateQRCodes(i === files.length - 1);
             document.getElementById('input_file_button').hidden = true;
             document.getElementById('input_file_button').parentElement.hidden = true;
@@ -240,12 +241,12 @@ let printWindow;
 
 function print () {
     printWindow = window.open('', 'PRINT', "width=840; height=592;");
-    
+
     printWindow.document.write(`
         <html>
             <head>
                 <title>Transfer Order Labels</title>
-                <link rel="stylesheet" href="./assets/css/label.css">
+                <link rel="stylesheet" href="./assets/css/label.min.css">
             </head>
             <body>`);
     
