@@ -284,6 +284,9 @@ function print () {
     }
 
     printWindow.document.write(`
+            <script>
+                window.localStorage.clear();
+            </script>
             </body>
         </html>
     `);
