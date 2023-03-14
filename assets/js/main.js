@@ -1,5 +1,4 @@
 document.body.innerHTML += `
-<h1>XDDDDDDDDDDDD></h1>
     <div class="uk-card uk-card-default uk-card-large uk-width-1-2@m uk-position-absolute uk-position-center">
         <div class="uk-card-header">
             <div class="uk-grid-small uk-flex-middle" uk-grid>
