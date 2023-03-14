@@ -268,7 +268,7 @@ let printWindow;
 
 function print () {
     printWindow = window.open('', 'PRINT', "width=840; height=592;");
-    printWindow.localStorage.clear();
+    
     printWindow.document.write(`
         <html>
             <head>
