@@ -156,7 +156,7 @@ class Label {
 
 document.getElementById('input_file').addEventListener("change", (_event) => {
     if (printWindow != null) {
-        //printWindow.close();
+        printWindow.close();
     }
     
     const files = _event.target.files;
