@@ -273,7 +273,7 @@ function print () {
         <html>
             <head>
                 <title>Transfer Order Labels</title>
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator/assets/css/label.min.css@latest">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dawidkuprowski/transferorderlabelgenerator@main/assets/css/label.min.css@latest">
             </head>
             <body>`);
     
