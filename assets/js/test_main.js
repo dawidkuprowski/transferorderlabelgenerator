@@ -167,11 +167,11 @@ document.getElementById('input_file').addEventListener("change", (_event) => {
         document.getElementById('input_file_label').innerText = "Generuje etykiety...";
         let fileReader = new FileReader();
         fileReader.readAsBinaryString(files[i]);
-        fileReader.onload = async (event) => {
+        fileReader.onload = (event) => {
             let data = event.target.result;
-            let workbook = await XLSX.read(data, { type:"binary" });
-            await workbook.SheetNames.forEach(async (sheet) => {
-                let rowObject = await XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+            let workbook = XLSX.read(data, { type:"binary" });
+                workbook.SheetNames.forEach((sheet) => {
+                let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
                 for (let i = 0; i < rowObject.length; i++) {
                     const id = labels.length;
                     let _date = Number(rowObject[i]["Creation Date"]);
@@ -207,7 +207,7 @@ function clearLabels () {
 
 let printWindow;
 
-async function print () {
+function print () {
     printWindow = window.open('', 'PRINT', "width=840; height=592;");
 
     printWindow.document.write(`
@@ -218,13 +218,13 @@ async function print () {
             </head>
             <body>`);
     
-    for await (const child of labelsContainer.children) {
+    for (const child of labelsContainer.children) {
         printWindow.document.write(`<div class="label_container">`);
         printWindow.document.write(child.innerHTML);
         printWindow.document.write(`</div>`);
     }
 
-    for await (label of labels) {
+    for (label of labels) {
         var qrANC = new QRCode(printWindow.document.getElementById("qrANC_" + label.id), {
             width: 96,
             height: 96,
@@ -248,6 +248,7 @@ async function print () {
             height: 96,
             text: label.tr_order + label.tr_item
         });
+        console.log(qrTR_ORDER_ITEM)
     }
 
     printWindow.document.write(`
