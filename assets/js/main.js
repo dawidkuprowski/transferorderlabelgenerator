@@ -28,7 +28,7 @@ class Label {
         this.user = user;
         this.unit = unit;
         
-        this.init();
+        //this.init();
     }
 
     getWeekNumber(date) {
