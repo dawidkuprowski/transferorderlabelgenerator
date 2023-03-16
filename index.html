@@ -12,9 +12,24 @@
     </head>
     <body>
         <div class="container">
-            <input id="input_file" accept=".xls,.xlsx" multiple="true" type="file" />
+            <div class="header pd">
+                <span class="title">Transfer Order Label Generator</span>
+                <span class="version"></span>
+            </div>
+            <div class="hb"></div>
+            <div class="body pd">
+                <div id="log_container"></div>
+            </div>
+            <div class="hb"></div>
+            <div class="footer pd">
+                <span class="loader" hidden></span>
+                <label for="input_file" class="custom_file_upload">
+                    Wybierz pliki
+                </label>
+                <input id="input_file" accept=".xls,.xlsx" multiple="true" type="file" />
+            </div>
         </div>
         <div id="labels"></div>
-        <script src="./assets/js/main.js" type="module"></script>
+        <script src="./assets/js/main.js" type="text/javascript"></script>
     </body>
 </html>
