@@ -1,6 +1,5 @@
-const labelsContainer = document.getElementById('labels');
-let labels = [];
-const qrCodeSize = 128;
+const version = "1.1.0";
+document.querySelector(".version").innerHTML = `Wersja ${version}`;
 
 class Label {
     constructor (id, date, time, anc, qty, from_st, from_bin, to_st, to_bin, tr_order, tr_item, material_description, user, unit) {
@@ -27,8 +26,6 @@ class Label {
         this.material_description = material_description;
         this.user = user;
         this.unit = unit;
-        
-        this.init();
     }
 
     getWeekNumber(date) {
@@ -48,8 +45,8 @@ class Label {
         return `${String(roundedHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`;
     }
     
-    init () {
-        labelsContainer.innerHTML += `
+    getLayout () {
+        return `
         <div class="label_container">
             <div class="row">
                 <div class="col">
@@ -149,129 +146,120 @@ class Label {
             </div>
         </div>
         `;
-
-        labels.push(this);
     }
 }
 
-document.getElementById('input_file').addEventListener("change", (_event) => {
-    if (printWindow != null) {
-        printWindow.close();
-    }
-    
-    const files = _event.target.files;
-    if (files.length > 0)
-        clearLabels();
+const inputFile = document.getElementById("input_file");
+const labelsContainer = document.getElementById("labels");
+const logContainer = document.getElementById("log_container");
+const loader = document.querySelector(".loader");
+const customFileUpload = document.querySelector(".custom_file_upload");
 
-    for (let i = 0; i < files.length; i++) {
-        document.getElementById('input_file_label').innerText = "Generuje etykiety...";
-        let fileReader = new FileReader();
-        fileReader.readAsBinaryString(files[i]);
-        fileReader.onload = (event) => {
-            let data = event.target.result;
-            let workbook = XLSX.read(data, { type:"binary" });
-                workbook.SheetNames.forEach((sheet) => {
-                let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
-                for (let i = 0; i < rowObject.length; i++) {
-                    const id = labels.length;
-                    let _date = Number(rowObject[i]["Creation Date"]);
-                    let _time = Number(rowObject[i]["Creation time"]);
-                    let _anc = rowObject[i]["Material"].toString();
-                    let _qty = rowObject[i]["Source target qty"].toString();
-                    let _from_st = rowObject[i]["Source Storage Type"].toString();
-                    let _from_bin = rowObject[i]["Source Storage Bin"].toString();
-                    let _to_st = rowObject[i]["Dest. Storage Type"].toString();
-                    let _to_bin = rowObject[i]["Dest.Storage Bin"].toString();
-                    let _tr_order = rowObject[i]["Transfer Order Number"].toString();
-                    let _tr_item = rowObject[i]["Transfer order item"].toString();
-                    let _material_description = rowObject[i]["Material Description"].toString();
-                    let _user = rowObject[i]["User"].toString();
-                    let _unit = rowObject[i]["Alternative Unit of Measure"].toString();
+let labels = [];
+let printWindow = null;
 
-                    if (_anc.length > 9) {
-                        _anc = _anc.substr(_anc.length - 9);
-                    }
-                    new Label(id, _date, _time, _anc, _qty, _from_st, _from_bin, _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit);
+inputFile.addEventListener("change", async (event) => {
+    labels = [];
+    const files = event.target.files;
+    if (files.length == 0)
+        return;
+
+    log("Ładowanie plików...");
+    loader.hidden = false;
+    customFileUpload.style.display = "none";
+        
+    try {
+        for (let i = 0; i < files.length; i++) {
+            log("Konwertowanie...");
+            await new Promise((resolve, reject) => {
+                var fr = new FileReader();  
+                fr.onload = () => {
+                    resolve(fr.result);
                 }
+                fr.onerror = reject;
+                fr.readAsBinaryString(files[i]);
+            }).then((data) => {
+                const workbook = XLSX.read(data, { type:"binary" });
+                workbook.SheetNames.forEach((sheet) => {
+                    const rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+                    rowObject.forEach((row) => {
+                        const id = labels.length;
+                        let _date = Number(row["Creation Date"]);
+                        let _time = Number(row["Creation time"]);
+                        let _anc = row["Material"].toString();
+                        let _qty = row["Source target qty"].toString();
+                        let _from_st = row["Source Storage Type"].toString();
+                        let _from_bin = row["Source Storage Bin"].toString();
+                        let _to_st = row["Dest. Storage Type"].toString();
+                        let _to_bin = row["Dest.Storage Bin"].toString();
+                        let _tr_order = row["Transfer Order Number"].toString();
+                        let _tr_item = row["Transfer order item"].toString();
+                        let _material_description = row["Material Description"].toString();
+                        let _user = row["User"].toString();
+                        let _unit = row["Alternative Unit of Measure"].toString();
+    
+                        if (_anc.length > 9) {
+                            _anc = _anc.substr(_anc.length - 9);
+                        }
+                        const label = new Label(id, _date, _time, _anc, _qty, _from_st, _from_bin, _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit);
+                        labels.push(label);
+                    });
+                });
             });
         }
+    } catch (err) {
+        alert(err.stack);
+        labelsContainer.innerHTML = "";
+        customFileUpload.style.display = "block";
+        inputFile.value = '';
+        loader.hidden = true;
+        return;
     }
-    readyToPrint();
-    document.getElementById('input_file_button').hidden = true;
-    document.getElementById('input_file_button').parentElement.hidden = true;
-});
 
-function clearLabels () {
-    labelsContainer.innerHTML = '';
-}
-
-let printWindow;
-
-function print () {
-    printWindow = window.open('', 'PRINT', "width=840; height=592;");
-
-    printWindow.document.write(`
-        <html>
-            <head>
-                <title>Transfer Order Labels</title>
-                <link rel="stylesheet" href="./assets/css/label.min.css">
-            </head>
-            <body>`);
+    labelsContainer.innerHTML = "";
     
-    for (const child of labelsContainer.children) {
-        printWindow.document.write(`<div class="label_container">`);
-        printWindow.document.write(child.innerHTML);
-        printWindow.document.write(`</div>`);
+    log("Generowanie szablonów...");
+
+    for (let i = 0; i < labels.length; i++) {
+        labelsContainer.innerHTML += labels[i].getLayout();
     }
 
-    for (label of labels) {
-        var qrANC = new QRCode(printWindow.document.getElementById("qrANC_" + label.id), {
+    for (let i = 0; i < labels.length; i++) {
+        new QRCode(document.getElementById("qrANC_" + labels[i].id), {
             width: 96,
             height: 96,
-            text: label.normalAnc
+            text: labels[i].normalAnc
         });
 
-        var qrQTY = new QRCode(printWindow.document.getElementById("qrQTY_" + label.id), {
+        new QRCode(document.getElementById("qrQTY_" + labels[i].id), {
             width: 96,
             height: 96,
-            text: Number(label.qty).toFixed(0)
+            text: Number(labels[i].qty).toFixed(0)
         });
         
-        var qrTO_BIN = new QRCode(printWindow.document.getElementById("qrTO_BIN_" + label.id), {
+        new QRCode(document.getElementById("qrTO_BIN_" + labels[i].id), {
             width: 96,
             height: 96,
-            text: label.to_bin.replace(/\s/g,'')
+            text: labels[i].to_bin.replace(/\s/g,'')
         });
 
-        var qrTR_ORDER_ITEM = new QRCode(printWindow.document.getElementById("qrTR_ORDER_ITEM_" + label.id), {
+        new QRCode(document.getElementById("qrTR_ORDER_ITEM_" + labels[i].id), {
             width: 96,
             height: 96,
-            text: label.tr_order + label.tr_item
+            text: labels[i].tr_order + labels[i].tr_item
         });
-        console.log(qrTR_ORDER_ITEM)
+        console.log(`QRID: ${i}`);
     }
+    log(`Uruchamianie podglądu wydruku...`);
+    loader.hidden = true;
+    window.print();
+    customFileUpload.style.display = "block";
+    inputFile.value = '';
+    log(`Wybierz pliki do skonwertowania.`);
+});
 
-    printWindow.document.write(`
-            </body>
-        </html>
-    `);
-
-    refreshApp();
+const log = (message) => {
+    logContainer.innerHTML = message;
 }
 
-function refreshApp () {
-    clearLabels();
-    labels = [];
-    document.getElementById('input_file').value = '';
-    document.getElementById('button_print').hidden = true;
-    document.getElementById('input_file_button').hidden = false;
-    document.getElementById('input_file_button').parentElement.hidden = false;
-    document.getElementById('input_file_label').innerText = "Wybierz dokumenty do skonwertowania.";
-}
-
-refreshApp();
-
-function readyToPrint () {
-    document.getElementById('input_file_label').innerText = `Dokumenty zostały pomyślnie skonwertowane.\nWejdź w podgląd i użyj kombinacji przycisków \n"Ctrl + P" aby wydrukować etykiety.`;
-    document.getElementById('button_print').hidden = false;
-}
+log(`Wybierz pliki do skonwertowania.`);
