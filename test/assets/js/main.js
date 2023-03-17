@@ -17,8 +17,8 @@ class Label {
         this.normalAnc = anc;
         this.anc = anc.replace(/(.{3})/g, '$1 ');
         this.qty = qty;
-        this.from_st = from_st;
-        this.from_bin = from_bin;
+        //this.from_st = from_st;
+        //this.from_bin = from_bin;
         this.to_st = to_st;
         this.to_bin = to_bin.padStart(8, '0').replace(/\d{2}(?!$)/g, "$& ");
         this.tr_order = tr_order.padStart(10, '0');
@@ -191,8 +191,8 @@ inputFile.addEventListener("change", async (event) => {
                         let _time = Number(rowObject[x]["Creation time"]);
                         let _anc = rowObject[x]["Material"].toString();
                         let _qty = rowObject[x]["Source target qty"].toString();
-                        let _from_st = rowObject[x]["Source Storage Type"].toString();
-                        let _from_bin = rowObject[x]["Source Storage Bin"].toString();
+                        //let _from_st = rowObject[x]["Source Storage Type"].toString();
+                        //let _from_bin = rowObject[x]["Source Storage Bin"].toString();
                         let _to_st = rowObject[x]["Dest. Storage Type"].toString();
                         let _to_bin = rowObject[x]["Dest.Storage Bin"].toString();
                         let _tr_order = rowObject[x]["Transfer Order Number"].toString();
@@ -204,7 +204,7 @@ inputFile.addEventListener("change", async (event) => {
                         if (_anc.length > 9) {
                             _anc = _anc.substr(_anc.length - 9);
                         }
-                        const label = new Label(id, _date, _time, _anc, _qty, _from_st, _from_bin, _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit);
+                        const label = new Label(id, _date, _time, _anc, _qty, "_from_st", "_from_bin", _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit);
                         labels.push(label);
                     }
                 }
@@ -256,16 +256,15 @@ inputFile.addEventListener("change", async (event) => {
             text: labels[i].tr_order + labels[i].tr_item
         });
     }
-
+    endTime = Date.now();
+    const elapsedTime = endTime - startTime;
+    console.log("Operation time: " + elapsedTime + "ms");
     log(`Uruchamianie podglądu wydruku...`);
     loader.hidden = true;
     window.print();
     customFileUpload.style.display = "block";
     inputFile.value = '';
     log(`Wybierz pliki do skonwertowania.`);
-    endTime = Date.now();
-    const elapsedTime = endTime - startTime;
-    console.log("Operation time: " + elapsedTime + "ms");
 });
 
 const log = (message) => {
