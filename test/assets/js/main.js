@@ -156,21 +156,22 @@ const loader = document.querySelector(".loader");
 const customFileUpload = document.querySelector(".custom_file_upload");
 
 let labels = [];
-let printWindow = null;
+
+let startTime, endTime;
 
 inputFile.addEventListener("change", async (event) => {
+    startTime = Date.now();
     labels = [];
     const files = event.target.files;
     if (files.length == 0)
         return;
 
-    log("Ładowanie plików...");
+    log("Konwertowanie...");
     loader.hidden = false;
     customFileUpload.style.display = "none";
-        
+    const filesLength = files.length;
     try {
-        for (let i = 0; i < files.length; i++) {
-            log("Konwertowanie...");
+        for (let i = 0; i < filesLength; i++) {
             await new Promise((resolve, reject) => {
                 var fr = new FileReader();  
                 fr.onload = () => {
@@ -180,51 +181,57 @@ inputFile.addEventListener("change", async (event) => {
                 fr.readAsBinaryString(files[i]);
             }).then((data) => {
                 const workbook = XLSX.read(data, { type:"binary" });
-                workbook.SheetNames.forEach((sheet) => {
-                    const rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
-                    rowObject.forEach((row) => {
+                const sheetNamesLength = workbook.SheetNames.length;
+                for (let y = 0; y < sheetNamesLength; y++) {
+                    const rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[y]]);
+                    const rowObjectLength = rowObject.length;
+                    for (let x = 0; x < rowObjectLength; x++) {
                         const id = labels.length;
-                        let _date = Number(row["Creation Date"]);
-                        let _time = Number(row["Creation time"]);
-                        let _anc = row["Material"].toString();
-                        let _qty = row["Source target qty"].toString();
-                        let _from_st = row["Source Storage Type"].toString();
-                        let _from_bin = row["Source Storage Bin"].toString();
-                        let _to_st = row["Dest. Storage Type"].toString();
-                        let _to_bin = row["Dest.Storage Bin"].toString();
-                        let _tr_order = row["Transfer Order Number"].toString();
-                        let _tr_item = row["Transfer order item"].toString();
-                        let _material_description = row["Material Description"].toString();
-                        let _user = row["User"].toString();
-                        let _unit = row["Alternative Unit of Measure"].toString();
+                        let _date = Number(rowObject[x]["Creation Date"]);
+                        let _time = Number(rowObject[x]["Creation time"]);
+                        let _anc = rowObject[x]["Material"].toString();
+                        let _qty = rowObject[x]["Source target qty"].toString();
+                        let _from_st = rowObject[x]["Source Storage Type"].toString();
+                        let _from_bin = rowObject[x]["Source Storage Bin"].toString();
+                        let _to_st = rowObject[x]["Dest. Storage Type"].toString();
+                        let _to_bin = rowObject[x]["Dest.Storage Bin"].toString();
+                        let _tr_order = rowObject[x]["Transfer Order Number"].toString();
+                        let _tr_item = rowObject[x]["Transfer order item"].toString();
+                        let _material_description = rowObject[x]["Material Description"].toString();
+                        let _user = rowObject[x]["User"].toString();
+                        let _unit = rowObject[x]["Alternative Unit of Measure"].toString();
     
                         if (_anc.length > 9) {
                             _anc = _anc.substr(_anc.length - 9);
                         }
                         const label = new Label(id, _date, _time, _anc, _qty, _from_st, _from_bin, _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit);
                         labels.push(label);
-                    });
-                });
+                    }
+                }
             });
         }
     } catch (err) {
         alert(err.stack);
-        labelsContainer.innerHTML = "";
+        labelsContainer.innerText = "";
         customFileUpload.style.display = "block";
         inputFile.value = '';
         loader.hidden = true;
         return;
     }
 
-    labelsContainer.innerHTML = "";
+    labelsContainer.innerText = "";
     
     log("Generowanie szablonów...");
 
-    for (let i = 0; i < labels.length; i++) {
-        labelsContainer.innerHTML += labels[i].getLayout();
-    }
+    const labelsLength = labels.length;
+    let layout = "";
 
-    for (let i = 0; i < labels.length; i++) {
+    for (let i = 0; i < labelsLength; i++) {
+        layout += labels[i].getLayout();
+    }
+    labelsContainer.innerHTML = layout;
+
+    for (let i = 0; i < labelsLength; i++) {
         new QRCode(document.getElementById("qrANC_" + labels[i].id), {
             width: 96,
             height: 96,
@@ -248,18 +255,21 @@ inputFile.addEventListener("change", async (event) => {
             height: 96,
             text: labels[i].tr_order + labels[i].tr_item
         });
-        console.log(`QRID: ${i}`);
     }
+
     log(`Uruchamianie podglądu wydruku...`);
     loader.hidden = true;
     window.print();
     customFileUpload.style.display = "block";
     inputFile.value = '';
     log(`Wybierz pliki do skonwertowania.`);
+    endTime = Date.now();
+    const elapsedTime = endTime - startTime;
+    console.log("Operation time: " + elapsedTime + "ms");
 });
 
 const log = (message) => {
-    logContainer.innerHTML = message;
+    logContainer.innerText = message;
 }
 
 log(`Wybierz pliki do skonwertowania.`);
