@@ -49,6 +49,7 @@ body {
 
 .header {
     gap: 4px;
+    text-align: center;
 }
 
 .body {
