@@ -1,18 +1,212 @@
-.uk-card {
-    border-radius: 8px;
-}
-
-.uk-button {
-    border-radius: 8px;
-}
-
-html {
-    background: none;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    word-break: break-word;
 }
 
 body {
     background: radial-gradient(circle at top left,transparent 9%, #e6e6e6 10% ,#e6e6e6 15% , transparent 16%) , radial-gradient(circle at bottom left,transparent 9%, #e6e6e6 10% ,#e6e6e6 15% , transparent 16%), radial-gradient(circle at top right ,transparent 9%, #e6e6e6 10% ,#e6e6e6 15% , transparent 16%) , radial-gradient(circle at bottom right,transparent 9%, #e6e6e6 10% ,#e6e6e6 15% , transparent 16%),radial-gradient(circle, transparent 25%, #EBEBEb  26%),linear-gradient(45deg, transparent 46%, #e6e6e6 47%, #e6e6e6 52%, transparent 53%), linear-gradient(135deg, transparent 46%, #e6e6e6 47%, #e6e6e6 52%, transparent 53%);
     background-size: 4em 4em;
     background-color: #EBEBEb;
-    opacity: 1
+}
+
+.container {
+    position: absolute;
+
+    right: 50%;
+    bottom: 50%;
+
+    transform: translate(50%, 50%);
+
+    background-color: #fff;
+
+    border-radius: 8px;
+
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.pd {
+    padding: 32px 64px;
+}
+
+.hb {
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+}
+
+.header, .body, .footer {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.header {
+    gap: 4px;
+}
+
+.body {
+    padding: 64px 64px;
+}
+
+.title {
+    font-size: 24px;
+}
+
+.version {
+    font-size: 14px;
+    font-weight: 100;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+#labels {
+    display: none;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom_file_upload {
+    text-align: center;
+    width: 300px;
+    border-radius: 8px;
+    display: block;
+    padding: 16px 64px;
+    background-color: #111;
+    color: #fff;
+    cursor: pointer;
+}
+
+.custom_file_upload:hover {
+    background-color: #303030;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.custom_file_upload:active {
+    background-color: #000;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.loader {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border-top: 3px solid lightskyblue;
+    border-right: 3px solid transparent;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+    transform: rotate(0deg);
+    }
+    100% {
+    transform: rotate(360deg);
+    }
+}
+
+@media print {
+	body {
+        background: #fff;
+    }
+
+    .container {
+        display: none;
+    }
+
+    #labels {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+    }
+    
+    .label_container {
+        width: 100%;
+        height: 100%;
+        border: 0.35vw solid #000;
+    
+        display: flex;
+        flex-flow: column;
+        overflow: hidden;
+    }
+    
+    .row {
+        display: flex;
+        flex: 1;
+    }
+    
+    .col {
+        display: flex;
+        flex-flow: column;
+    
+        justify-content: center;
+        align-items: center;
+    
+        padding: 0 1vw;
+        overflow: hidden;
+    }
+    
+    .border_row {
+        border-bottom: 0.35vw solid #000;
+    }
+    
+    .border_col {
+        border-right: 0.35vw solid #000;
+    }
+    
+    .gap-1 { gap: 8px; }
+    .gap-2 { gap: 16px; }
+    .gap-3 { gap: 32px; }
+    .gap-4 { gap: 64px; }
+    
+    .fs-1 { font-size: 1vw; }
+    .fs-2 { font-size: 2vw; }
+    .fs-3 { font-size: 3vw; }
+    .fs-4 { font-size: 4vw; }
+    .fs-5 { font-size: 5vw; }
+    .fs-6 { font-size: 6vw; }
+    .fs-7 { font-size: 7vw; }
+    .fs-8 { font-size: 8vw; }
+    .fs-9 { font-size: 9vw; }
+    .fs-10 { font-size: 10vw; }
+    .fs-11 { font-size: 11vw; }
+    .fs-12 { font-size: 12vw; }
+    .fs-13 { font-size: 13vw; }
+    .fs-14 { font-size: 14vw; }
+    .fs-15 { font-size: 15vw; }
+    
+    .fw-1 { font-weight: 100; }
+    .fw-2 { font-weight: 200; }
+    .fw-3 { font-weight: 300; }
+    .fw-4 { font-weight: 400; }
+    .fw-5 { font-weight: 500; }
+    .fw-6 { font-weight: 600; }
+    .fw-7 { font-weight: 700; }
+    .fw-8 { font-weight: 800; }
+    .fw-9 { font-weight: 900; }
+    
+    .flex-25 { flex: .25; }
+    .flex-50 { flex: .5; }
+    .flex-75 { flex: .75; }
+    .flex-100 { flex: 1; }
+    
+    .p0 { padding: 0; }
+    .p1 { padding: 1vw; }
+    .p05 { padding: 0.5vw; }
+    
+    .text-center {
+        text-align: center;
+    }
+    
+    canvas {
+        width: 13vw;
+    }
 }
