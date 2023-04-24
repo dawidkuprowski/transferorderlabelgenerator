@@ -1,5 +1,5 @@
 const version = "1.1.0";
-document.querySelector(".version").innerHTML = `Wersja ${version}`;
+document.querySelector(".version").innerHTML = version;
 
 class Label {
     constructor (id, date, time, anc, qty, from_st, from_bin, to_st, to_bin, tr_order, tr_item, material_description, user, unit) {
