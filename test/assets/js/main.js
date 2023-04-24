@@ -1,4 +1,4 @@
-const version = "1.1.0";
+const version = "Single QR Code Test";
 document.querySelector(".version").innerHTML = `Wersja ${version}`;
 
 class Label {
