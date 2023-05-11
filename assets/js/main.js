@@ -1,4 +1,4 @@
-const version = "1.1.0";
+const version = "Wersja 1.2.0";
 document.querySelector(".version").innerHTML = version;
 
 class Label {
@@ -114,10 +114,6 @@ class Label {
                     <div class="col p0">
                         <span class="fs-11 fw-7 text-center">${this.to_bin}</span>
                     </div>
-                </div>
-                <div class="border_col"></div>
-                <div class="col p05" id="qrTO_BIN_${this.id}">
-                        
                 </div>
             </div>
             <div class="border_row"></div>
@@ -235,7 +231,7 @@ inputFile.addEventListener("change", async (event) => {
         new QRCode(document.getElementById("qrANC_" + labels[i].id), {
             width: 96,
             height: 96,
-            text: labels[i].normalAnc
+            text: `${labels[i].normalAnc}\t${labels[i].to_bin.replace(/\s/g,'')}\r`
         });
 
         new QRCode(document.getElementById("qrQTY_" + labels[i].id), {
@@ -244,11 +240,11 @@ inputFile.addEventListener("change", async (event) => {
             text: Number(labels[i].qty).toFixed(0)
         });
         
-        new QRCode(document.getElementById("qrTO_BIN_" + labels[i].id), {
+        /*new QRCode(document.getElementById("qrTO_BIN_" + labels[i].id), {
             width: 96,
             height: 96,
             text: labels[i].to_bin.replace(/\s/g,'')
-        });
+        });*/
 
         new QRCode(document.getElementById("qrTR_ORDER_ITEM_" + labels[i].id), {
             width: 96,
