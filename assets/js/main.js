@@ -1,4 +1,4 @@
-const version = "1.3.0";
+const version = "Wersja 1.3.1";
 document.querySelector(".version").innerHTML = version;
 
 class Label {
@@ -87,6 +87,10 @@ class Label {
             </div>
             <div class="border_row"></div>
             <div class="row">
+                <div class="col p05" id="qrQTY_${this.id}">
+                    
+                </div>
+                <div class="border_col"></div>
                 <div class="col flex-100">
                     <div class="col p0">
                         <span class="fs-3 fw-6">QTY</span>
@@ -230,11 +234,12 @@ inputFile.addEventListener("change", async (event) => {
             text: `${labels[i].normalAnc}\t${labels[i].to_bin.replace(/\s/g,'')}\r`
         });
 
-        /*new QRCode(document.getElementById("qrQTY_" + labels[i].id), {
+        new QRCode(document.getElementById("qrQTY_" + labels[i].id), {
             width: 96,
             height: 96,
-            text: Number(labels[i].qty).toFixed(0)
-        });*/
+            text: Number(labels[i].qty).toFixed(0),
+            colorDark: "#0320fc"
+        });
         
         /*new QRCode(document.getElementById("qrTO_BIN_" + labels[i].id), {
             width: 96,
