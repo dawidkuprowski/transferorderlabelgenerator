@@ -1,8 +1,8 @@
-const version = "Wersja 1.3.2";
+const version = "Wersja 1.3.3";
 document.querySelector(".version").innerHTML = version;
 
 class Label {
-    constructor (id, date, time, anc, qty, from_st, from_bin, to_st, to_bin, tr_order, tr_item, material_description, user, unit) {
+    constructor (id, date, time, anc, qty, from_st, from_bin, to_st, to_bin, tr_order, tr_item, material_description, user, unit, material_type) {
         this.id = id;
         this.date = new Date(((date) - 25569) * 86400 * 1000).toLocaleDateString("pl-PL", {
             year: "numeric",
@@ -26,6 +26,19 @@ class Label {
         this.material_description = material_description;
         this.user = user;
         this.unit = unit;
+        this.material_type = material_type;
+
+        if (material_type.length > 0) {
+            this.material_type_string = `
+            <div class="border_col"></div>
+            <div class="col">
+                <div class="col p0">
+                    <span class="fs-7 fw-7 text-center">${this.material_type}</span>
+                </div>
+            </div>`;
+        } else {
+            this.material_type_string = '';
+        }
     }
 
     getWeekNumber(date) {
@@ -84,6 +97,7 @@ class Label {
                         <span class="fs-9 fw-7 text-center">${this.anc}</span>
                     </div>
                 </div>
+                ${this.material_type_string}
                 <div class="border_col"></div>
                 <div class="col p05" id="qrANC_${this.id}">
                     
@@ -196,11 +210,12 @@ inputFile.addEventListener("change", async (event) => {
                         let _material_description = rowObject[x]["Material Description"].toString();
                         let _user = rowObject[x]["User"].toString();
                         let _unit = rowObject[x]["Alternative Unit of Measure"].toString();
+                        let _material_type = rowObject[x]["Special Stock"] ? rowObject[x]["Special Stock"].toString() : '';
     
                         if (_anc.length > 9) {
                             _anc = _anc.substr(_anc.length - 9);
                         }
-                        const label = new Label(id, _date, _time, _anc, _qty, "_from_st", "_from_bin", _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit);
+                        const label = new Label(id, _date, _time, _anc, _qty, "_from_st", "_from_bin", _to_st, _to_bin, _tr_order, _tr_item, _material_description, _user, _unit, _material_type);
                         labels.push(label);
                     }
                 }
