@@ -1,4 +1,4 @@
-const version = "Wersja 1.3.3";
+const version = "Wersja 1.3.4";
 document.querySelector(".version").innerHTML = version;
 
 class Label {
@@ -221,6 +221,13 @@ inputFile.addEventListener("change", async (event) => {
                 }
             });
         }
+
+        labels.sort((a, b) => {
+            const [prefixA, numA] = [a.anc.slice(0, 3), parseInt(a.anc.slice(4).replace(/\s/g, ""), 10)];
+            const [prefixB, numB] = [b.anc.slice(0, 3), parseInt(b.anc.slice(4).replace(/\s/g, ""), 10)];
+    
+            return prefixA.localeCompare(prefixB) || numA - numB;
+        });
     } catch (err) {
         alert(err.stack);
         labelsContainer.innerText = "";
@@ -264,7 +271,7 @@ inputFile.addEventListener("change", async (event) => {
         new QRCode(document.getElementById("qrTR_ORDER_ITEM_" + labels[i].id), {
             width: 96,
             height: 96,
-            text: labels[i].tr_order + labels[i].tr_item
+            text: labels[i].tr_order + labels[i].tr_item + '\r'
         });
     }
     endTime = Date.now();
